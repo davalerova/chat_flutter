@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:chat/theme/app_theme.dart';
 import 'package:chat/routes/routes.dart';
 
 void main() => runApp(const MyApp());
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Material App',
       initialRoute: 'login',
       routes: appRoutes,
+      // theme: AppTheme().getTheme(),
     );
   }
 }

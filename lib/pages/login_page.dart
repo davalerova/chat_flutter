@@ -52,12 +52,12 @@ class __FormState extends State<_Form> {
               textController: passwordController,
               keyboardType: TextInputType.text,
               isPassword: true),
-          FilledButton(
+          BotonAzul(
+              text: 'Ingresar',
               onPressed: () {
                 print(emailController.text);
                 print(passwordController.text);
-              },
-              child: const Text('Login')),
+              }),
         ],
       ),
     );
