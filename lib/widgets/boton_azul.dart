@@ -19,7 +19,8 @@ class BotonAzul extends StatelessWidget {
           onPressed: onPressed,
           child: const Text(
             'Ingresar',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
           )),
     );
   }
