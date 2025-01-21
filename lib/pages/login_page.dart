@@ -16,9 +16,15 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Logo(),
+                  const Logo(
+                    titulo: 'Messenger',
+                  ),
                   const _Form(),
-                  const Labels(),
+                  const Labels(
+                    ruta: 'register',
+                    texto: '¿No tienes cuenta?',
+                    textoLink: 'Crea una ahora!',
+                  ),
                   const Text('Términos y condiciones de uso',
                       style: TextStyle(fontWeight: FontWeight.w200)),
                 ],
@@ -59,7 +65,7 @@ class __FormState extends State<_Form> {
               keyboardType: TextInputType.text,
               isPassword: true),
           BotonAzul(
-              text: 'Ingresar',
+              texto: 'Ingresar',
               onPressed: () {
                 print(emailController.text);
                 print(passwordController.text);

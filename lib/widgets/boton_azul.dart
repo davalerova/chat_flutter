@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BotonAzul extends StatelessWidget {
-  final String text;
+  final String texto;
   final VoidCallback onPressed;
-  const BotonAzul({super.key, required this.text, required this.onPressed});
+  const BotonAzul({super.key, required this.texto, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +17,8 @@ class BotonAzul extends StatelessWidget {
             shape: const StadiumBorder(),
           ),
           onPressed: onPressed,
-          child: const Text(
-            'Ingresar',
+          child: Text(
+            texto,
             style: TextStyle(
                 fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
           )),
