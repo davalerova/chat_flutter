@@ -11,19 +11,12 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   _ChatPageState();
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
 
-  final List<ChatMessage> _messages = [
-    ChatMessage(uuid: '123', texto: 'Hola tu'),
-    ChatMessage(uuid: '123', texto: 'Hola mundo'),
-    ChatMessage(uuid: '123', texto: 'Hola mundo'),
-    ChatMessage(uuid: '0', texto: 'Hola mundo'),
-    ChatMessage(uuid: '123', texto: 'Hola mundo'),
-    ChatMessage(uuid: '0', texto: 'nosdfglñ')
-  ];
+  final List<ChatMessage> _messages = [];
 
   bool _estaEscribiendo = false;
   @override
@@ -50,6 +43,7 @@ class _ChatPageState extends State<ChatPage> {
               itemBuilder: (_, i) => ChatMessage(
                 texto: _messages[i].texto,
                 uuid: _messages[i].uuid,
+                animationController: _messages[i].animationController,
               ),
               reverse: true,
             ),
@@ -58,13 +52,10 @@ class _ChatPageState extends State<ChatPage> {
           //   height: 0,
           // ),
           SafeArea(
-            child: Container(
-                color: Colors.white,
-                // height: 50,
-                child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    child: _inputChat())),
-          ),
+              child: Container(
+                  color: Colors.white,
+                  // height: 50,
+                  child: _inputChat())),
         ],
       ),
     );
@@ -72,20 +63,14 @@ class _ChatPageState extends State<ChatPage> {
 
   Container _inputChat() {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           Flexible(
             child: TextField(
               controller: _textController,
               textCapitalization: TextCapitalization.sentences,
-              onSubmitted: (_) {
-                print(_textController.text);
-                _textController.clear();
-                _focusNode.requestFocus();
-                setState(() {
-                  _estaEscribiendo = false;
-                });
-              },
+              onSubmitted: _handleSubmit,
               onChanged: (texto) => {
                 setState(() {
                   if (texto.trim().isNotEmpty) {
@@ -110,7 +95,9 @@ class _ChatPageState extends State<ChatPage> {
                       data: IconThemeData(color: Colors.blue[400]),
                       child: CupertinoButton(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        onPressed: _estaEscribiendo ? _handleSubmit : null,
+                        onPressed: _estaEscribiendo
+                            ? () => _handleSubmit(_textController.text)
+                            : null,
                         child: Text(
                           'Enviar',
                           style: TextStyle(
@@ -126,7 +113,9 @@ class _ChatPageState extends State<ChatPage> {
                       data: IconThemeData(color: Colors.blue[400]),
                       child: IconButton(
                         icon: Icon(Icons.send),
-                        onPressed: _estaEscribiendo ? _handleSubmit : null,
+                        onPressed: _estaEscribiendo
+                            ? () => _handleSubmit(_textController.text)
+                            : null,
                       ),
                     ),
             ),
@@ -136,15 +125,19 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  final newMessage = ChatMessage(uuid: '0', texto: 'Hola mundo');
-
-  _handleSubmit() {
-    print(_textController.text);
-    final newMessage = ChatMessage(uuid: '0', texto: _textController.text);
+  _handleSubmit(String texto) {
+    if (texto.isEmpty) return;
+    final newMessage = ChatMessage(
+        uuid: '0',
+        texto: texto.trim(),
+        animationController: AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 400)));
     _textController.clear();
     _focusNode.requestFocus();
 
     _messages.insert(0, newMessage);
+
+    newMessage.animationController.forward();
 
     setState(() {
       _estaEscribiendo = false;
