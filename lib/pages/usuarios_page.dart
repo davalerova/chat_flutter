@@ -1,5 +1,6 @@
-import 'package:chat/models/usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:chat/models/usuario.dart';
 
 class UsuariosPage extends StatefulWidget {
   const UsuariosPage({super.key});
@@ -9,6 +10,9 @@ class UsuariosPage extends StatefulWidget {
 }
 
 class _UsuariosPageState extends State<UsuariosPage> {
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   final usuarios = [
     Usuario(
         isOnline: true, nombre: 'Juan', email: 'juan@gmail.com', uuid: '1234'),
@@ -60,26 +64,46 @@ class _UsuariosPageState extends State<UsuariosPage> {
           ),
         ],
       ),
-      body: ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (_, i) => ListTile(
-              title: Text(usuarios[i].nombre),
-              leading: CircleAvatar(
-                backgroundColor: Colors.blue[100],
-                child: Text(usuarios[i].nombre.substring(0, 2)),
-              ),
-              trailing: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                    color: usuarios[i].isOnline
-                        ? Colors.green[300]
-                        : Colors.red[300],
-                    borderRadius: BorderRadius.circular(100)),
-              ),
-              onTap: () {}),
-          separatorBuilder: (_, i) => Divider(),
-          itemCount: usuarios.length),
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        header: WaterDropMaterialHeader(),
+        onRefresh: _cargarUsuarios,
+        child: _listViewUsuarios(),
+      ),
     );
+  }
+
+  ListView _listViewUsuarios() {
+    return ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (_, i) => _usuarioListTile(usuarios[i]),
+        separatorBuilder: (_, i) => Divider(),
+        itemCount: usuarios.length);
+  }
+
+  ListTile _usuarioListTile(Usuario usuario) {
+    return ListTile(
+        title: Text(usuario.nombre),
+        subtitle: Text(usuario.email),
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue[100],
+          child: Text(usuario.nombre.substring(0, 2)),
+        ),
+        trailing: Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+              color: usuario.isOnline ? Colors.green[300] : Colors.red[300],
+              borderRadius: BorderRadius.circular(100)),
+        ),
+        onTap: () {});
+  }
+
+  _cargarUsuarios() async {
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
   }
 }
