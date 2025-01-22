@@ -12,6 +12,8 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final _textController = TextEditingController();
+  final _focusNode = FocusNode();
+  bool _estaEscribiendo = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +41,9 @@ class _ChatPageState extends State<ChatPage> {
               reverse: true,
             ),
           ),
-          Divider(
-            height: 1,
-          ),
+          // Divider(
+          //   height: 0,
+          // ),
           SafeArea(
             child: Container(
                 color: Colors.white,
@@ -62,8 +64,27 @@ class _ChatPageState extends State<ChatPage> {
           Flexible(
             child: TextField(
               controller: _textController,
-              decoration: InputDecoration(
-                  hintText: 'Enviar mensaje', border: InputBorder.none),
+              textCapitalization: TextCapitalization.sentences,
+              onSubmitted: (_) {
+                print(_textController.text);
+                _textController.clear();
+                _focusNode.requestFocus();
+                setState(() {
+                  _estaEscribiendo = false;
+                });
+              },
+              onChanged: (texto) => {
+                setState(() {
+                  if (texto.trim().isNotEmpty) {
+                    _estaEscribiendo = true;
+                  } else {
+                    _estaEscribiendo = false;
+                  }
+                })
+              },
+              decoration: InputDecoration.collapsed(
+                  hintText: 'Mensaje', border: InputBorder.none),
+              focusNode: _focusNode,
             ),
           ),
           // Botón de enviar
@@ -72,31 +93,43 @@ class _ChatPageState extends State<ChatPage> {
             child: IconTheme(
               data: IconThemeData(color: Colors.blue[400]),
               child: Platform.isIOS
-                  ? CupertinoButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: const Text('Enviar',
+                  ? IconTheme(
+                      data: IconThemeData(color: Colors.blue[400]),
+                      child: CupertinoButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        onPressed: _estaEscribiendo ? _handleSubmit : null,
+                        child: Text(
+                          'Enviar',
                           style: TextStyle(
-                              color: Colors.blue,
                               fontSize: 18,
-                              fontWeight: FontWeight.bold)),
-                      onPressed: () {
-                        print(_textController.text);
-                        _textController.clear();
-                        FocusScope.of(context).requestFocus();
-                      },
+                              fontWeight: FontWeight.bold,
+                              color: _estaEscribiendo
+                                  ? Colors.blue
+                                  : Colors.black),
+                        ),
+                      ),
                     )
-                  : IconButton(
-                      icon: const Icon(Icons.send),
-                      onPressed: () {
-                        print(_textController.text);
-                        _textController.clear();
-                        FocusScope.of(context).requestFocus();
-                      },
+                  : IconTheme(
+                      data: IconThemeData(color: Colors.blue[400]),
+                      child: IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: _estaEscribiendo ? _handleSubmit : null,
+                      ),
                     ),
             ),
           )
         ],
       ),
     );
+  }
+
+  _handleSubmit() {
+    print(_textController.text);
+    _textController.clear();
+    _focusNode.requestFocus();
+
+    setState(() {
+      _estaEscribiendo = false;
+    });
   }
 }
