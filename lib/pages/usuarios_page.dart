@@ -13,36 +13,37 @@ class _UsuariosPageState extends State<UsuariosPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  final usuarios = [
-    Usuario(
-        isOnline: true, nombre: 'Juan', email: 'juan@gmail.com', uuid: '1234'),
-    Usuario(
-        isOnline: false, nombre: 'Pepe', email: 'pepe@gmail.com', uuid: '1235'),
-    Usuario(
-        isOnline: true,
-        nombre: 'Pedro',
-        email: 'pedro@gmail.com',
-        uuid: '1236'),
-    Usuario(
-        isOnline: false, nombre: 'Luis', email: 'luis@gmail.com', uuid: '1237'),
-    Usuario(
-        isOnline: true,
-        nombre: 'Maria',
-        email: 'maria@gmail.com',
-        uuid: '1238'),
-    Usuario(
-        isOnline: false,
-        nombre: 'Juana',
-        email: 'juana@gmail.com',
-        uuid: '1239'),
-    Usuario(
-        isOnline: true, nombre: 'Jose', email: 'jose@gmail.com', uuid: '1240'),
-    Usuario(
-        isOnline: false,
-        nombre: 'Carlos',
-        email: 'carlos@gmail.com',
-        uuid: '1241'),
-  ];
+  final usuarios = [];
+  // final usuarios = [
+  //   Usuario(
+  //       isOnline: true, nombre: 'Juan', email: 'juan@gmail.com', uuid: '1234'),
+  //   Usuario(
+  //       isOnline: false, nombre: 'Pepe', email: 'pepe@gmail.com', uuid: '1235'),
+  //   Usuario(
+  //       isOnline: true,
+  //       nombre: 'Pedro',
+  //       email: 'pedro@gmail.com',
+  //       uuid: '1236'),
+  //   Usuario(
+  //       isOnline: false, nombre: 'Luis', email: 'luis@gmail.com', uuid: '1237'),
+  //   Usuario(
+  //       isOnline: true,
+  //       nombre: 'Maria',
+  //       email: 'maria@gmail.com',
+  //       uuid: '1238'),
+  //   Usuario(
+  //       isOnline: false,
+  //       nombre: 'Juana',
+  //       email: 'juana@gmail.com',
+  //       uuid: '1239'),
+  //   Usuario(
+  //       isOnline: true, nombre: 'Jose', email: 'jose@gmail.com', uuid: '1240'),
+  //   Usuario(
+  //       isOnline: false,
+  //       nombre: 'Carlos',
+  //       email: 'carlos@gmail.com',
+  //       uuid: '1241'),
+  // ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +95,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
           width: 10,
           height: 10,
           decoration: BoxDecoration(
-              color: usuario.isOnline ? Colors.green[300] : Colors.red[300],
+              color: usuario.online ? Colors.green[300] : Colors.red[300],
               borderRadius: BorderRadius.circular(100)),
         ),
         onTap: () {});
