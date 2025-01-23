@@ -49,6 +49,7 @@ class __FormState extends State<_Form> {
   final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 20),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -68,13 +69,21 @@ class __FormState extends State<_Form> {
               isPassword: true),
           BotonAzul(
               texto: 'Ingresar',
-              onPressed: () {
-                final authService =
-                    Provider.of<AuthService>(context, listen: false);
-                authService.login(
-                    emailController.text, passwordController.text);
-                print(emailController.text);
-                print(passwordController.text);
+              isDisabled: authService.autenticando,
+              onPressed: () async {
+                FocusScope.of(context).unfocus(); // Ocultar teclado
+                final loginSuccess = await authService.login(
+                    emailController.text.trim(),
+                    passwordController.text.trim());
+                if (loginSuccess) {
+                  // Si el login es correcto, redirige a la página de inicio
+                  Navigator.pushNamed(context, 'usuarios');
+                } else {
+                  // Muestra un error si falla el login
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Error al iniciar sesión')),
+                  );
+                }
               }),
         ],
       ),

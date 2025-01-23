@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 
 class BotonAzul extends StatelessWidget {
   final String texto;
-  final VoidCallback onPressed;
-  const BotonAzul({super.key, required this.texto, required this.onPressed});
+  final Function onPressed;
+  final bool isDisabled; // Nuevo parámetro para controlar el estado del botón
+
+  const BotonAzul(
+      {super.key,
+      required this.texto,
+      required this.onPressed,
+      this.isDisabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +19,10 @@ class BotonAzul extends StatelessWidget {
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             elevation: 2,
-            backgroundColor: Colors.blue,
+            backgroundColor: isDisabled ? Colors.grey : Colors.blue,
             shape: const StadiumBorder(),
           ),
-          onPressed: onPressed,
+          onPressed: isDisabled ? null : () => onPressed(),
           child: Text(
             texto,
             style: TextStyle(
