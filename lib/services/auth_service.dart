@@ -66,6 +66,35 @@ class AuthService with ChangeNotifier {
     }
   }
 
+  Future register(String name, String email, String password) async {
+    autenticando = true;
+    final data = {
+      'nombre': name,
+      'email': email,
+      'password': password,
+    };
+
+    Uri url = Uri.parse('${Environment.apiUrl}/login/new');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(data),
+    );
+    _autenticando = false;
+    if (response.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(response.body);
+      usuario = loginResponse.usuario;
+      await _guardarToken(loginResponse.token);
+      return true;
+    } else {
+      await _eliminarToken();
+      final respBody = jsonDecode(response.body);
+      return respBody['msg'];
+    }
+  }
+
   Future<bool> _guardarToken(String token) async {
     await _storage.write(key: 'token', value: token);
     return true;
