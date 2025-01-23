@@ -1,4 +1,6 @@
+import 'package:chat/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:chat/models/usuario.dart';
 
@@ -14,47 +16,21 @@ class _UsuariosPageState extends State<UsuariosPage> {
       RefreshController(initialRefresh: false);
 
   final usuarios = [];
-  // final usuarios = [
-  //   Usuario(
-  //       isOnline: true, nombre: 'Juan', email: 'juan@gmail.com', uuid: '1234'),
-  //   Usuario(
-  //       isOnline: false, nombre: 'Pepe', email: 'pepe@gmail.com', uuid: '1235'),
-  //   Usuario(
-  //       isOnline: true,
-  //       nombre: 'Pedro',
-  //       email: 'pedro@gmail.com',
-  //       uuid: '1236'),
-  //   Usuario(
-  //       isOnline: false, nombre: 'Luis', email: 'luis@gmail.com', uuid: '1237'),
-  //   Usuario(
-  //       isOnline: true,
-  //       nombre: 'Maria',
-  //       email: 'maria@gmail.com',
-  //       uuid: '1238'),
-  //   Usuario(
-  //       isOnline: false,
-  //       nombre: 'Juana',
-  //       email: 'juana@gmail.com',
-  //       uuid: '1239'),
-  //   Usuario(
-  //       isOnline: true, nombre: 'Jose', email: 'jose@gmail.com', uuid: '1240'),
-  //   Usuario(
-  //       isOnline: false,
-  //       nombre: 'Carlos',
-  //       email: 'carlos@gmail.com',
-  //       uuid: '1241'),
-  // ];
+
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final usuario = authService.usuario;
     return Scaffold(
       backgroundColor: const Color(0xffF2F2F2),
       appBar: AppBar(
-        title: const Text('Mi nombre'),
+        title: Text(usuario.nombre),
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, 'login');
+              AuthService.deleteToken();
             },
             icon: Icon(Icons.exit_to_app)),
         actions: [
