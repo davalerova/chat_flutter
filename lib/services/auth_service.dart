@@ -31,13 +31,12 @@ class AuthService with ChangeNotifier {
       },
       body: jsonEncode(data),
     );
+    _autenticando = false;
     if (response.statusCode == 200) {
       final loginResponse = loginResponseFromJson(response.body);
       usuario = loginResponse.usuario;
-      _autenticando = false;
       return true;
     } else {
-      _autenticando = false;
       return false;
     }
   }

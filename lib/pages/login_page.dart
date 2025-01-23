@@ -1,3 +1,4 @@
+import 'package:chat/helpers/mostrar_alerta.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chat/widgets/widgets.dart';
@@ -75,14 +76,17 @@ class __FormState extends State<_Form> {
                 final loginSuccess = await authService.login(
                     emailController.text.trim(),
                     passwordController.text.trim());
+                if (!mounted) return;
                 if (loginSuccess) {
                   // Si el login es correcto, redirige a la página de inicio
                   Navigator.pushNamed(context, 'usuarios');
                 } else {
                   // Muestra un error si falla el login
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Error al iniciar sesión')),
-                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Error al iniciar sesión')),
+                  // );
+                  mostrarAlerta(context, 'Login incorrecto',
+                      'Revise sus credenciales nuevamente');
                 }
               }),
         ],
