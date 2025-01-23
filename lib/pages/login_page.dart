@@ -79,7 +79,7 @@ class __FormState extends State<_Form> {
                 if (!mounted) return;
                 if (loginSuccess) {
                   // Si el login es correcto, redirige a la página de inicio
-                  Navigator.pushNamed(context, 'usuarios');
+                  Navigator.pushReplacementNamed(context, 'usuarios');
                 } else {
                   // Muestra un error si falla el login
                   // ScaffoldMessenger.of(context).showSnackBar(
