@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:chat/widgets/widgets.dart';
+import 'package:chat/services/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -67,6 +69,10 @@ class __FormState extends State<_Form> {
           BotonAzul(
               texto: 'Ingresar',
               onPressed: () {
+                final authService =
+                    Provider.of<AuthService>(context, listen: false);
+                authService.login(
+                    emailController.text, passwordController.text);
                 print(emailController.text);
                 print(passwordController.text);
               }),
