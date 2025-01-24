@@ -24,7 +24,8 @@ class _UsuariosPageState extends State<UsuariosPage> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
     final usuario = authService.usuario;
-    final socketService = Provider.of<SocketService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context);
+    final isOnline = socketService.serverStatus == ServerStatus.online;
     return Scaffold(
       backgroundColor: const Color(0xffF2F2F2),
       appBar: AppBar(
@@ -41,8 +42,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 10),
-            child: const Icon(Icons.check_circle, color: Colors.green),
-            // child: const Icon(Icons.offline_bolt, color: Colors.red),
+            child: isOnline
+                ? Icon(Icons.check_circle, color: Colors.blue[300])
+                : Icon(Icons.offline_bolt, color: Colors.red[300]),
           ),
         ],
       ),
