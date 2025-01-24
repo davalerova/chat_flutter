@@ -1,3 +1,4 @@
+import 'package:chat/global/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -11,16 +12,11 @@ class SocketService with ChangeNotifier {
   IO.Socket get socket => _socket;
   Function get emit => _socket.emit;
 
-  SocketService() {
-    _initConfig();
-  }
-
-  void _initConfig() {
-    // IO.Socket socket = IO.io('https://vibramon.co/ws/socket.io/', {
-    // _socket = IO.io('http://localhost:8000/', {
-    _socket = IO.io('https://express-server-socket-io.onrender.com/', {
+  void connect() {
+    _socket = IO.io(Environment.socketUrl, {
       'transports': ['websocket'],
       'autoConnect': true,
+      'forceNew': true,
     });
     _socket.onConnect((_) {
       _serverStatus = ServerStatus.online;
@@ -32,15 +28,9 @@ class SocketService with ChangeNotifier {
       notifyListeners();
       print('disconnect');
     });
-    // socket.on('nuevo-mensaje', (payload) {
-    //   print('nuevo mensaje');
-    //   print('Nombre: ${payload['nombre']}');
-    //   print('Email: ${payload['email']}');
-    //   print(
-    //       'Mensaje: ${payload.containsKey('mensaje') ? payload['mensaje'] : 'No hay mensaje'}');
-    // });
-    // socket.on('active-bands', (payload) {
-    //   print('active-bands $payload');
-    // });
+  }
+
+  void disconnect() {
+    _socket.disconnect();
   }
 }

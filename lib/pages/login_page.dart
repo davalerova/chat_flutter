@@ -1,4 +1,5 @@
 import 'package:chat/helpers/mostrar_alerta.dart';
+import 'package:chat/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chat/widgets/widgets.dart';
@@ -51,6 +52,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 20),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -78,6 +80,7 @@ class __FormState extends State<_Form> {
                     passwordController.text.trim());
                 if (!mounted) return;
                 if (loginSuccess) {
+                  socketService.connect();
                   // Si el login es correcto, redirige a la página de inicio
                   Navigator.pushReplacementNamed(context, 'usuarios');
                 } else {
