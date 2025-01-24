@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:chat/services/usuarios_service.dart';
 import 'package:chat/services/auth_service.dart';
 import 'package:chat/services/socket_service.dart';
+import 'package:chat/services/chat_service.dart';
 
 import 'package:chat/models/usuario.dart';
 
@@ -76,6 +77,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
   }
 
   ListTile _usuarioListTile(Usuario usuario) {
+    final chatService = Provider.of<ChatService>(context, listen: false);
     return ListTile(
         title: Text(usuario.nombre),
         subtitle: Text(usuario.email),
@@ -90,7 +92,10 @@ class _UsuariosPageState extends State<UsuariosPage> {
               color: usuario.online ? Colors.green[300] : Colors.red[300],
               borderRadius: BorderRadius.circular(100)),
         ),
-        onTap: () {});
+        onTap: () {
+          chatService.usuarioSeleccionado = usuario;
+          Navigator.pushNamed(context, 'chat');
+        });
   }
 
   _cargarUsuarios() async {
